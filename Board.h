@@ -19,6 +19,7 @@ public:
     std::vector<std::vector<Piece*>> getGrid() const;
     bool isInCheck(bool white) const;
     bool causesCheck(int srcRow, int srcCol, int destRow, int destCol);
+    bool isCheckmate(bool white);
 };
 
 #endif //CHESS_EX1_SARAAGHANEM_MAIN_BOARD_H

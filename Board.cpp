@@ -98,3 +98,29 @@ int Board::validateAndMove(const std::string& move) {
 std::vector<std::vector<Piece*>> Board::getGrid() const {
     return grid;
 }
+
+
+bool Board::isCheckmate(bool white) {
+    if (!isInCheck(white)) return false;
+
+    for (int srcRow = 0; srcRow < 8; ++srcRow) {
+        for (int srcCol = 0; srcCol < 8; ++srcCol) {
+            Piece* piece = grid[srcRow][srcCol];
+            if (piece && piece->isWhite() == white) {
+                auto moves = piece->getLegalMoves(srcRow, srcCol, grid);
+                for (const auto& move : moves) {
+                    int destRow = move.first;
+                    int destCol = move.second;
+                    Piece* temp = grid[destRow][destCol];
+                    grid[destRow][destCol] = grid[srcRow][srcCol];
+                    grid[srcRow][srcCol] = nullptr;
+                    bool stillInCheck = isInCheck(white);
+                    grid[srcRow][srcCol] = grid[destRow][destCol];
+                    grid[destRow][destCol] = temp;
+                    if (!stillInCheck) return false;
+                }
+            }
+        }
+    }
+    return true;
+}
